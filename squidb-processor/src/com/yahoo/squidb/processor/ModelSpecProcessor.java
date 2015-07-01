@@ -13,6 +13,7 @@ import com.yahoo.squidb.processor.properties.factory.PluggablePropertyGeneratorF
 import com.yahoo.squidb.processor.properties.factory.PropertyGeneratorFactory;
 import com.yahoo.squidb.processor.writers.InheritedModelFileWriter;
 import com.yahoo.squidb.processor.writers.ModelFileWriter;
+import com.yahoo.squidb.processor.writers.SyncedTableModelFileWriter;
 import com.yahoo.squidb.processor.writers.TableModelFileWriter;
 import com.yahoo.squidb.processor.writers.ViewModelFileWriter;
 
@@ -67,7 +68,7 @@ public final class ModelSpecProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         result.add(TableModelSpec.class.getName());
         result.add(ViewModelSpec.class.getName());
         result.add(InheritedModelSpec.class.getName());
@@ -145,7 +146,7 @@ public final class ModelSpecProcessor extends AbstractProcessor {
 
     private ModelFileWriter<?> getFileWriter(TypeElement typeElement) {
         if (typeElement.getAnnotation(TableModelSpec.class) != null) {
-            return new TableModelFileWriter(typeElement, propertyGeneratorFactory, utils);
+            return new SyncedTableModelFileWriter(typeElement, propertyGeneratorFactory, utils);
         } else if (typeElement.getAnnotation(ViewModelSpec.class) != null) {
             return new ViewModelFileWriter(typeElement, propertyGeneratorFactory, utils);
         } else if (typeElement.getAnnotation(InheritedModelSpec.class) != null) {

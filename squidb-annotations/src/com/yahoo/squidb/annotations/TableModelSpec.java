@@ -38,12 +38,10 @@ public @interface TableModelSpec {
     String virtualModule() default "";
 
     /**
-     * True if the table should be synchronized with its' copy on a server (origin).
+     * True if the table should be synchronized with its' origin copy on a server .
      * Syncable table will contain additional fields such as:
-     * - long server_id - id of the origin table row
-     * - int row_state - state  of the table row (0 = IDLE, 1 = INSERTING, 2 = UPDATING, 3 = DELETING)
-     * - long created_at - row creation timestamp
-     * - long updated_at - row last updating timestamp
+     * - long origin_id - id of the origin row
+     * - int row_state - state  of the row (0 = IDLE, 1 = INSERTING, 2 = UPDATING, 3 = DELETING)
      */
     boolean isSyncable() default true;
 
