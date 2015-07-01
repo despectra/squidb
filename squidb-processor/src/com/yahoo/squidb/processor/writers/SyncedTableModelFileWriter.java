@@ -19,27 +19,34 @@ import javax.lang.model.element.TypeElement;
 
 public class SyncedTableModelFileWriter extends TableModelFileWriter {
 
+    private boolean isSyncable;
+
     public SyncedTableModelFileWriter(TypeElement element, PropertyGeneratorFactory propertyGeneratorFactory, AptUtils utils) {
         super(element, propertyGeneratorFactory, utils);
+        this.isSyncable = modelSpec.isSyncable();
     }
 
     @Override
     protected Collection<DeclaredTypeName> getModelSpecificImports() {
         List<DeclaredTypeName> imports = (List<DeclaredTypeName>) super.getModelSpecificImports();
-        imports.add(TypeConstants.INTEGER_PROPERTY);
+        if(isSyncable) {
+            imports.add(TypeConstants.INTEGER_PROPERTY);
+        }
         return imports;
     }
 
     @Override
     protected int getPropertiesArrayLength() {
-        return super.getPropertiesArrayLength() + 4;
+        return super.getPropertiesArrayLength() + (isSyncable ? 4 : 0);
     }
 
     @Override
     protected void emitAllProperties() throws IOException {
         super.emitAllProperties();
-        emitOriginIdPropertyDeclaration();
-        emitRowStatusPropertyDeclaration();
+        if(isSyncable) {
+            emitOriginIdPropertyDeclaration();
+            emitRowStatusPropertyDeclaration();
+        }
     }
 
     private void emitOriginIdPropertyDeclaration() throws IOException {
@@ -55,22 +62,26 @@ public class SyncedTableModelFileWriter extends TableModelFileWriter {
     @Override
     protected void writePropertiesInitializationBlock() throws IOException {
         super.writePropertiesInitializationBlock();
-        int startIndex = propertyGenerators.size() + 1;
-        writer.writeStatement(Expressions
-                .assign(Expressions.arrayReference(PROPERTIES_ARRAY_NAME, startIndex), Expressions.fromString("ORIGIN_ID")));
-        writer.writeStatement(Expressions
-                .assign(Expressions.arrayReference(PROPERTIES_ARRAY_NAME, startIndex + 1), Expressions.fromString("ROW_STATE")));
+        if(isSyncable) {
+            int startIndex = propertyGenerators.size() + 1;
+            writer.writeStatement(Expressions
+                    .assign(Expressions.arrayReference(PROPERTIES_ARRAY_NAME, startIndex), Expressions.fromString("ORIGIN_ID")));
+            writer.writeStatement(Expressions
+                    .assign(Expressions.arrayReference(PROPERTIES_ARRAY_NAME, startIndex + 1), Expressions.fromString("ROW_STATE")));
+        }
     }
 
     @Override
     protected void emitGettersAndSetters() throws IOException {
         super.emitGettersAndSetters();
-        emitOriginIdGetter();
-        emitConfirmOriginInsertionMethod();
-        emitRowStateGetter();
-        emitMarkUpdatingMethod();
-        emitMarkDeletingMethod();
-        emitMarkIdleMethod();
+        if(isSyncable) {
+            emitOriginIdGetter();
+            emitConfirmOriginInsertionMethod();
+            emitRowStateGetter();
+            emitMarkUpdatingMethod();
+            emitMarkDeletingMethod();
+            emitMarkIdleMethod();
+        }
     }
 
     private void emitOriginIdGetter() throws IOException {
