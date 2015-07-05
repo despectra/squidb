@@ -52,13 +52,13 @@ public class SyncedTableModelFileWriter extends TableModelFileWriter {
     }
 
     private void emitOriginIdPropertyDeclaration() throws IOException {
-        Expression fieldConstructor = Expressions.callConstructor(TypeConstants.LONG_PROPERTY, "origin_id", "\"DEFAULT 0 NOT NULL\"");
-        writer.writeFieldDeclaration(TypeConstants.LONG_PROPERTY, "ORIGIN_ID", fieldConstructor);
+        Expression fieldConstructor = Expressions.callConstructor(TypeConstants.LONG_PROPERTY, TABLE_NAME, "\"origin_id\"", "\"DEFAULT 0 NOT NULL\"");
+        writer.writeFieldDeclaration(TypeConstants.LONG_PROPERTY, "ORIGIN_ID", fieldConstructor, TypeConstants.PUBLIC_STATIC_FINAL);
     }
 
     private void emitRowStatusPropertyDeclaration() throws IOException {
-        Expression fieldConstructor = Expressions.callConstructor(TypeConstants.INTEGER_PROPERTY, "row_status", "\"DEFAULT 1 NOT NULL\"");
-        writer.writeFieldDeclaration(TypeConstants.INTEGER_PROPERTY, "ROW_STATUS", fieldConstructor);
+        Expression fieldConstructor = Expressions.callConstructor(TypeConstants.INTEGER_PROPERTY, TABLE_NAME, "\"row_state\"", "\"DEFAULT 1 NOT NULL\"");
+        writer.writeFieldDeclaration(TypeConstants.INTEGER_PROPERTY, "ROW_STATE", fieldConstructor, TypeConstants.PUBLIC_STATIC_FINAL);
     }
 
     @Override
