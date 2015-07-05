@@ -68,7 +68,7 @@ public final class ModelSpecProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> result = new HashSet<>();
+        Set<String> result = new HashSet<String>();
         result.add(TableModelSpec.class.getName());
         result.add(ViewModelSpec.class.getName());
         result.add(InheritedModelSpec.class.getName());

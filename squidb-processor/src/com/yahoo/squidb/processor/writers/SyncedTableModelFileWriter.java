@@ -16,7 +16,9 @@ import java.util.List;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
-
+/**
+ * Subclass of TableModelFileWriter to write specific fields and methods to a syncable models
+ */
 public class SyncedTableModelFileWriter extends TableModelFileWriter {
 
     private boolean isSyncable;
